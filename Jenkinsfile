@@ -5,7 +5,7 @@ pipeline {
     REGISTRY_PUSH = 'dk-lab-registry:5000'
     REGISTRY_DEPLOY = 'localhost:5001'
     IMAGE_NAME = 'dk-first-web'
-    // 반드시 자신의 공개 GitOps 저장소로 바꾸세요. PAT/비밀번호를 URL에 넣지 않습니다.
+    // 공개 GitOps 저장소 주소입니다. PAT/비밀번호를 URL에 넣지 않습니다.
     GITOPS_REPO = 'https://github.com/ChoiWon-Chul/dk-lab-gitops.git'
   }
   stages {
@@ -45,7 +45,7 @@ pipeline {
             set -eu
             set +x
             case "$GITOPS_REPO" in
-              *ChoiWon-Chul*) echo '[실패] Jenkinsfile의 ChoiWon-Chul를 실제 계정명으로 교체하세요.' >&2; exit 1 ;;
+              *REPLACE_OWNER*) echo '[실패] Jenkinsfile의 REPLACE_OWNER를 실제 계정명으로 교체하세요.' >&2; exit 1 ;;
               https://github.com/*/dk-lab-gitops.git) ;;
               *) echo '[실패] 예상하지 못한 GitOps 저장소 URL' >&2; exit 1 ;;
             esac
@@ -54,8 +54,8 @@ pipeline {
             cat > "$ASKPASS" <<'ASKPASS_EOF'
 #!/bin/sh
 case "$1" in
-  *Username*) printf '%s\n' "$GIT_USER" ;;
-  *Password*) printf '%s\n' "$GIT_TOKEN" ;;
+  *Username*) printf '%s\\n' "$GIT_USER" ;;
+  *Password*) printf '%s\\n' "$GIT_TOKEN" ;;
 esac
 ASKPASS_EOF
             chmod 700 "$ASKPASS"
