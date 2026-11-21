@@ -48,10 +48,10 @@ pipeline {
           sh '''
             set -eu
             set +x
-            test "$GITOPS_REPO" = "https://github.com/ChoiWon-Chul/dk-lab-gitops.git" || {
-              echo '[FAIL] Unexpected GitOps repository URL' >&2
-              exit 1
-            }
+            case "$GITOPS_REPO" in
+              https://github.com/ChoiWon-Chul/dk-lab-gitops.git) ;;
+              *) echo '[실패] GitOps 저장소 주소를 확인하세요.' >&2; exit 1 ;;
+            esac
 
             ASKPASS="$WORKSPACE/.dk-git-askpass.sh"
             cat > "$ASKPASS" <<'ASKPASS_EOF'
